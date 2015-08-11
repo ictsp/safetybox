@@ -1,36 +1,39 @@
 /**
- * 暗号化・復号化を行うためのライブラリ。
- * 暗号化・復号化にはCryptoJSライブラリ (https://code.google.com/p/crypto-js)を使用する。
- * 暗号方式はAES-256を採用。
+ * 暗号化・復号化を行うためのライブラリ。 暗号化・復号化にはCryptoJSライブラリ
+ * (https://code.google.com/p/crypto-js)を使用する。 暗号方式はAES-256を採用。
  *
  * 【関数群】
  *
- * GetAes256Passphrase	AES-256用のパスフレーズを作成する関数
- * Aes256Encrypt		CryptoJSを使って暗号化する関数
- * Aes256Decrypt		CryptoJSを使って復号する関数
- * Encrypt0				暗号化関数（セキュリティレベル０用）
- * Encrypt1				暗号化関数（セキュリティレベル１用）
- * Encrypt2				暗号化関数（セキュリティレベル２用）
- * Decrypt0				復号化関数（セキュリティレベル０用）
- * Decrypt1				復号化関数（セキュリティレベル１用）
- * Decrypt2				復号化関数（セキュリティレベル２用）
- * GetPassphraseItem	フォームからGetAes256Passphrase関数で既定の長さに変更したパスフレーズを取得する関数
- * DecryptItem			セキュリティレベルとパスフレーズの入力状況によりフォーム項目を復号する関数
- * PrintStackTrace		例外オブジェクトからスタックトレースを出力する関数
+ * GetAes256Passphrase AES-256用のパスフレーズを作成する関数 Aes256Encrypt CryptoJSを使って暗号化する関数
+ * Aes256Decrypt CryptoJSを使って復号する関数 Encrypt0 暗号化関数（セキュリティレベル０用） Encrypt1
+ * 暗号化関数（セキュリティレベル１用） Encrypt2 暗号化関数（セキュリティレベル２用） Decrypt0 復号化関数（セキュリティレベル０用）
+ * Decrypt1 復号化関数（セキュリティレベル１用） Decrypt2 復号化関数（セキュリティレベル２用） GetPassphraseItem
+ * フォームからGetAes256Passphrase関数で既定の長さに変更したパスフレーズを取得する関数 DecryptItem
+ * セキュリティレベルとパスフレーズの入力状況によりフォーム項目を復号する関数 PrintStackTrace
+ * 例外オブジェクトからスタックトレースを出力する関数
  *
  *
  * 【参考サイト】
  *
- * アプリ作家見習いメモ	http://dokuwiki.eniblo.org/doku.php/javascript/library/crypto_js
- * 自己言及のパラドックス	http://sct9.blog85.fc2.com/blog-entry-62.html
+ * アプリ作家見習いメモ http://dokuwiki.eniblo.org/doku.php/javascript/library/crypto_js
+ * 自己言及のパラドックス http://sct9.blog85.fc2.com/blog-entry-62.html
  * JavaScriptで暗号化した文字列をRubyで復号化してみた
- * 					http://qiita.com/shigekid/items/60d3387de6a804bc38b9
- * DEV TIPS			http://www.hiihah.info/index.php?JavaScript%EF%BC%9ACryptoJS%E3%82%92%E4%BD%BF%E3%81%A3%E3%81%A6%E7%94%BB%E5%83%8F%E3%82%92%E6%9A%97%E5%8F%B7%E5%8C%96%E3%83%BB%E5%BE%A9%E5%8F%B7%E3%81%99%E3%82%8B
+ * http://qiita.com/shigekid/items/60d3387de6a804bc38b9 DEV TIPS
+ * http://www.hiihah.info/index.php?JavaScript%EF%BC%9ACryptoJS%E3%82%92%E4%BD%BF%E3%81%A3%E3%81%A6%E7%94%BB%E5%83%8F%E3%82%92%E6%9A%97%E5%8F%B7%E5%8C%96%E3%83%BB%E5%BE%A9%E5%8F%B7%E3%81%99%E3%82%8B
  *
  * @author Hirotomo Okazawa
  * @version 1.0
  */
 
+var CIPHER = {
+	'OK' : 'OK',
+	'NG' : 'NG',
+	'UNDEF' : 'undefined',
+	'UNMATCH' : 'UNMATCH',
+	'LEVEL0' : '0',
+	'LEVEL1' : '1',
+	'LEVEL2' : '2'
+};
 /**
  * AES-256用のパスフレーズを作成する関数
  *
@@ -72,7 +75,7 @@ function Aes256Encrypt(plain, passphraseName, passphrase) {
 	if (!plain) {
 		// 暗号化したい元の文字列が指定されていない場合は空文字列を返却する
 		return {
-			rc : "OK",
+			rc : CIPHER.OK,
 			encryptedValue : '',
 			message : ''
 		};
@@ -88,7 +91,7 @@ function Aes256Encrypt(plain, passphraseName, passphrase) {
 		console.log('暗号化失敗 理由: %s', message);
 
 		return {
-			rc : "NG",
+			rc : CIPHER.NG,
 			encryptedValue : null,
 			message : message
 		};
@@ -111,7 +114,7 @@ function Aes256Encrypt(plain, passphraseName, passphrase) {
 			console.log('暗号化失敗 理由: %s', message);
 
 			return {
-				rc : "NG",
+				rc : CIPHER.NG,
 				encryptedValue : null,
 				message : message
 			};
@@ -130,7 +133,7 @@ function Aes256Encrypt(plain, passphraseName, passphrase) {
 		console.log('暗号化失敗 理由: %s', message);
 
 		return {
-			rc : "NG",
+			rc : CIPHER.NG,
 			encryptedValue : null,
 			message : message
 		};
@@ -144,7 +147,7 @@ function Aes256Encrypt(plain, passphraseName, passphrase) {
 
 	// 暗号化された文字列を復号して一致するか確認する
 	var test = Aes256Decrypt(encryptedString, passphraseName, passphrase);
-	if (test.rc !== "OK" || test.decryptedValue !== source) {
+	if (test.rc !== CIPHER.OK || test.decryptedValue !== source) {
 		// testとsourceが一致しない場合はエラーとする
 
 		// エラーメッセージを作成する
@@ -153,7 +156,7 @@ function Aes256Encrypt(plain, passphraseName, passphrase) {
 		console.log('暗号化失敗 理由: %s', message);
 
 		return {
-			rc : "NG",
+			rc : CIPHER.NG,
 			encryptedValue : null,
 			message : message
 		};
@@ -161,7 +164,7 @@ function Aes256Encrypt(plain, passphraseName, passphrase) {
 
 	// 暗号化した文字列を返却する
 	return {
-		rc : "OK",
+		rc : CIPHER.OK,
 		encryptedValue : encryptedString,
 		message : message
 	};
@@ -185,7 +188,7 @@ function Aes256Decrypt(encrypted, passphraseName, passphrase) {
 	if (!encrypted) {
 		// 暗号化された文字列が指定されていない場合は空文字列を返却する
 		return {
-			rc : "OK",
+			rc : CIPHER.OK,
 			decryptedValue : '',
 			message : ''
 		};
@@ -201,7 +204,7 @@ function Aes256Decrypt(encrypted, passphraseName, passphrase) {
 		console.log('復号化失敗 理由: %s', message);
 
 		return {
-			rc : "NG",
+			rc : CIPHER.NG,
 			decryptedValue : null,
 			message : message
 		};
@@ -224,7 +227,7 @@ function Aes256Decrypt(encrypted, passphraseName, passphrase) {
 			console.log('復号化失敗 理由: %s', message);
 
 			return {
-				rc : "NG",
+				rc : CIPHER.NG,
 				decryptedValue : null,
 				message : message
 			};
@@ -243,7 +246,7 @@ function Aes256Decrypt(encrypted, passphraseName, passphrase) {
 		console.log('復号化失敗 理由: %s', message);
 
 		return {
-			rc : "NG",
+			rc : CIPHER.NG,
 			decryptedValue : null,
 			message : message
 		};
@@ -264,7 +267,7 @@ function Aes256Decrypt(encrypted, passphraseName, passphrase) {
 		console.log('復号化失敗 理由: %s', message);
 
 		return {
-			rc : "NG",
+			rc : CIPHER.NG,
 			decryptedValue : null,
 			message : message
 		};
@@ -274,7 +277,7 @@ function Aes256Decrypt(encrypted, passphraseName, passphrase) {
 
 	// 復号した文字列を返却する
 	return {
-		rc : "OK",
+		rc : CIPHER.OK,
 		decryptedValue : plain,
 		message : ""
 	};
@@ -295,20 +298,20 @@ function Encrypt0(plain) {
 	if (!plain) {
 		// 暗号化したい元の文字列が指定されていない場合は空文字列を返却する
 		return {
-			rc : "OK",
-			level : "0",
+			rc : CIPHER.OK,
+			level : CIPHER.LEVEL0,
 			encryptedValue : "",
-			message : "OK"
+			message : ""
 		};
 	}
 
 	// 暗号化したい元の文字列をUTF-8に変換して返却する
 	// return CryptoJS.enc.Utf8.parse(plain);
 	return {
-		rc : "OK",
-		level : "0",
+		rc : CIPHER.OK,
+		level : CIPHER.LEVEL0,
 		encryptedValue : plain.toString(),
-		message : "OK"
+		message : ""
 	};
 }
 
@@ -327,10 +330,10 @@ function Encrypt1(plain, passphrase1name, passphrase1) {
 	if (!plain) {
 		// 暗号化したい元の文字列が指定されていない場合は空文字列を返却する
 		return {
-			rc : "OK",
-			level : "1",
+			rc : CIPHER.OK,
+			level : CIPHER.LEVEL1,
 			encryptedValue : "",
-			message : "OK"
+			message : ""
 		};
 	}
 
@@ -344,8 +347,8 @@ function Encrypt1(plain, passphrase1name, passphrase1) {
 		console.log('暗号化失敗 理由: %s', message);
 
 		return {
-			rc : "NG",
-			level : "1",
+			rc : CIPHER.NG,
+			level : CIPHER.LEVEL1,
 			encryptedValue : null,
 			message : message
 		};
@@ -358,11 +361,11 @@ function Encrypt1(plain, passphrase1name, passphrase1) {
 		// AES-256で暗号化する
 		encrypted1 = Aes256Encrypt(plain, passphrase1name, passphrase1);
 		// 処理結果確認
-		if (encrypted1.rc !== "OK") {
+		if (encrypted1.rc !== CIPHER.OK) {
 			console.log('暗号化失敗 理由: %s', encrypted1.message);
 			return {
-				rc : "NG",
-				level : "1",
+				rc : CIPHER.NG,
+				level : CIPHER.LEVEL1,
 				encryptedValue : null,
 				message : encrypted1.message
 			};
@@ -376,8 +379,8 @@ function Encrypt1(plain, passphrase1name, passphrase1) {
 						message, plain, passphrase1name, passphrase1);
 
 		return {
-			rc : "NG",
-			level : "1",
+			rc : CIPHER.NG,
+			level : CIPHER.LEVEL1,
 			encryptedValue : null,
 			message : message
 		};
@@ -388,11 +391,11 @@ function Encrypt1(plain, passphrase1name, passphrase1) {
 	try {
 		encrypted = Encrypt0(encrypted1.encryptedValue);
 		// 処理結果確認
-		if (encrypted.rc !== "OK") {
+		if (encrypted.rc !== CIPHER.OK) {
 			console.log('暗号化失敗 理由: %s', encrypted.message);
 			return {
-				rc : "NG",
-				level : "1",
+				rc : CIPHER.NG,
+				level : CIPHER.LEVEL1,
 				encryptedValue : null,
 				message : encrypted.message
 			};
@@ -404,8 +407,8 @@ function Encrypt1(plain, passphrase1name, passphrase1) {
 				message, passphrase1name, encrypted1);
 
 		return {
-			rc : "NG",
-			level : "1",
+			rc : CIPHER.NG,
+			level : CIPHER.LEVEL1,
 			encryptedValue : null,
 			message : message
 		};
@@ -413,10 +416,10 @@ function Encrypt1(plain, passphrase1name, passphrase1) {
 
 	// 暗号化した文字列を返却する
 	return {
-		rc : "OK",
-		level : "1",
+		rc : CIPHER.OK,
+		level : CIPHER.LEVEL1,
 		encryptedValue : encrypted.encryptedValue,
-		message : "OK"
+		message : ""
 	};
 
 }
@@ -439,10 +442,10 @@ function Encrypt2(plain, passphrase1name, passphrase1, passphrase2name,
 	if (!plain) {
 		// 暗号化したい元の文字列が指定されていない場合は空文字列を返却する
 		return {
-			rc : "OK",
-			level : "2",
+			rc : CIPHER.OK,
+			level : CIPHER.LEVEL2,
 			encryptedValue : "",
-			message : "OK"
+			message : ""
 		};
 	}
 
@@ -454,8 +457,8 @@ function Encrypt2(plain, passphrase1name, passphrase1, passphrase2name,
 		var message = passphrase1name + "が指定されていません";
 
 		return {
-			rc : "NG",
-			level : "2",
+			rc : CIPHER.NG,
+			level : CIPHER.LEVEL2,
 			encryptedValue : null,
 			message : message
 		};
@@ -470,8 +473,8 @@ function Encrypt2(plain, passphrase1name, passphrase1, passphrase2name,
 		var message = passphrase2name + "が指定されていません";
 
 		return {
-			rc : "NG",
-			level : "2",
+			rc : CIPHER.NG,
+			level : CIPHER.LEVEL2,
 			encryptedValue : null,
 			message : message
 		};
@@ -484,11 +487,11 @@ function Encrypt2(plain, passphrase1name, passphrase1, passphrase2name,
 		// AES-256で暗号化する
 		encrypted2 = Aes256Encrypt(plain, passphrase2name, passphrase2);
 		// 処理結果確認
-		if (encrypted2.rc !== "OK") {
+		if (encrypted2.rc !== CIPHER.OK) {
 			console.log('暗号化失敗 理由: %s', encrypted2.message);
 			return {
-				rc : "NG",
-				level : "2",
+				rc : CIPHER.NG,
+				level : CIPHER.LEVEL2,
 				encryptedValue : null,
 				message : encrypted2.message
 			};
@@ -502,8 +505,8 @@ function Encrypt2(plain, passphrase1name, passphrase1, passphrase2name,
 						message, plain, passphrase2name, passphrase2);
 
 		return {
-			rc : "NG",
-			level : "2",
+			rc : CIPHER.NG,
+			level : CIPHER.LEVEL2,
 			encryptedValue : null,
 			message : message
 		};
@@ -516,11 +519,11 @@ function Encrypt2(plain, passphrase1name, passphrase1, passphrase2name,
 		encrypted = Encrypt1(encrypted2.encryptedValue, passphrase1name,
 				passphrase1);
 		// 処理結果確認
-		if (encrypted.rc !== "OK") {
+		if (encrypted.rc !== CIPHER.OK) {
 			console.log('暗号化失敗 理由: %s', encrypted.message);
 			return {
-				rc : "NG",
-				level : "2",
+				rc : CIPHER.NG,
+				level : CIPHER.LEVEL2,
 				encryptedValue : null,
 				message : encrypted.message
 			};
@@ -534,8 +537,8 @@ function Encrypt2(plain, passphrase1name, passphrase1, passphrase2name,
 						message, encrypted2, passphrase1name, passphrase1);
 
 		return {
-			rc : "NG",
-			level : "2",
+			rc : CIPHER.NG,
+			level : CIPHER.LEVEL2,
 			encryptedValue : null,
 			message : message
 		};
@@ -563,8 +566,8 @@ function Decrypt0(encrypted) {
 	if (!encrypted) {
 		// セキュリティレベル０で暗号化された文字列が指定されていない場合は空文字列を返却する
 		return {
-			rc : "OK",
-			level : "0",
+			rc : CIPHER.OK,
+			level : CIPHER.LEVEL0,
 			decryptedValue : "",
 			message : ""
 		};
@@ -577,8 +580,8 @@ function Decrypt0(encrypted) {
 
 	// 復号した文字列を返却する
 	return {
-		rc : "OK",
-		level : "0",
+		rc : CIPHER.OK,
+		level : CIPHER.LEVEL0,
 		decryptedValue : plain,
 		message : ""
 	};
@@ -602,8 +605,8 @@ function Decrypt1(encrypted, passphrase1name, passphrase1) {
 	if (!encrypted) {
 		// セキュリティレベル１で暗号化された文字列が指定されていない場合は空文字列を返却する
 		return {
-			rc : "OK",
-			level : "1",
+			rc : CIPHER.OK,
+			level : CIPHER.LEVEL1,
 			decryptedValue : "",
 			message : ""
 		};
@@ -619,8 +622,8 @@ function Decrypt1(encrypted, passphrase1name, passphrase1) {
 		console.log('復号化失敗 理由: %s', message);
 
 		return {
-			rc : "NG",
-			level : "1",
+			rc : CIPHER.NG,
+			level : CIPHER.LEVEL1,
 			decryptedValue : null,
 			message : message
 		};
@@ -638,11 +641,11 @@ function Decrypt1(encrypted, passphrase1name, passphrase1) {
 		console.log('message --> %s', encrypted0.message);
 
 		// 処理結果確認
-		if (encrypted0.rc !== "OK") {
+		if (encrypted0.rc !== CIPHER.OK) {
 			console.log('復号化失敗 理由: %s', encrypted0.message);
 			return {
-				rc : "NG",
-				level : "1",
+				rc : CIPHER.NG,
+				level : CIPHER.LEVEL1,
 				decryptedValue : null,
 				message : encrypted0.message
 			};
@@ -653,8 +656,8 @@ function Decrypt1(encrypted, passphrase1name, passphrase1) {
 		console.log('Decrypt0で例外発生 : %s encrypted1=[%s]', message, encrypted);
 
 		return {
-			rc : "NG",
-			level : "1",
+			rc : CIPHER.NG,
+			level : CIPHER.LEVEL1,
 			decryptedValue : null,
 			message : message
 		};
@@ -678,11 +681,11 @@ function Decrypt1(encrypted, passphrase1name, passphrase1) {
 		console.log('message --> %s', plain.message);
 
 		// 処理結果確認
-		if (plain.rc !== "OK") {
+		if (plain.rc !== CIPHER.OK) {
 			console.log('復号化失敗 理由: %s', plain.message);
 			return {
-				rc : "NG",
-				level : "1",
+				rc : CIPHER.NG,
+				level : CIPHER.LEVEL1,
 				decryptedValue : null,
 				message : plain.message
 			};
@@ -697,8 +700,8 @@ function Decrypt1(encrypted, passphrase1name, passphrase1) {
 						passphrase1);
 
 		return {
-			rc : "NG",
-			level : "1",
+			rc : CIPHER.NG,
+			level : CIPHER.LEVEL1,
 			decryptedValue : null,
 			message : message
 		};
@@ -706,8 +709,8 @@ function Decrypt1(encrypted, passphrase1name, passphrase1) {
 
 	// 復号した文字列を返却する
 	return {
-		rc : "OK",
-		level : "1",
+		rc : CIPHER.OK,
+		level : CIPHER.LEVEL1,
 		decryptedValue : plain.decryptedValue,
 		message : ""
 	};
@@ -740,8 +743,8 @@ function Decrypt2(encrypted, passphrase1name, passphrase1, passphrase2name,
 	if (!encrypted) {
 		// セキュリティレベル２で暗号化された文字列が指定されていない場合は空文字列を返却する
 		return {
-			rc : "OK",
-			level : "2",
+			rc : CIPHER.OK,
+			level : CIPHER.LEVEL2,
 			decryptedValue : "",
 			message : ""
 		};
@@ -757,8 +760,8 @@ function Decrypt2(encrypted, passphrase1name, passphrase1, passphrase2name,
 		console.log('復号化失敗 理由: %s', message);
 
 		return {
-			rc : "NG",
-			level : "2",
+			rc : CIPHER.NG,
+			level : CIPHER.LEVEL2,
 			decryptedValue : null,
 			message : message
 		};
@@ -774,8 +777,8 @@ function Decrypt2(encrypted, passphrase1name, passphrase1, passphrase2name,
 		console.log('復号化失敗 理由: %s', message);
 
 		return {
-			rc : "NG",
-			level : "2",
+			rc : CIPHER.NG,
+			level : CIPHER.LEVEL2,
 			decryptedValue : null,
 			message : message
 		};
@@ -793,11 +796,11 @@ function Decrypt2(encrypted, passphrase1name, passphrase1, passphrase2name,
 		console.log('message --> %s', encrypted1.message);
 
 		// 処理結果確認
-		if (encrypted1.rc !== "OK") {
+		if (encrypted1.rc !== CIPHER.OK) {
 			console.log('復号化失敗 理由: %s', encrypted1.message);
 			return {
-				rc : "NG",
-				level : "2",
+				rc : CIPHER.NG,
+				level : CIPHER.LEVEL2,
 				decryptedValue : null,
 				message : encrypted1.message
 			};
@@ -811,8 +814,8 @@ function Decrypt2(encrypted, passphrase1name, passphrase1, passphrase2name,
 						message, encrypted, passphrase1name, passphrase1);
 
 		return {
-			rc : "NG",
-			level : "2",
+			rc : CIPHER.NG,
+			level : CIPHER.LEVEL2,
 			decryptedValue : null,
 			message : message
 		};
@@ -840,11 +843,11 @@ function Decrypt2(encrypted, passphrase1name, passphrase1, passphrase2name,
 		console.log('message --> %s', plain.message);
 
 		// 処理結果確認
-		if (!plain || plain.rc !== "OK") {
+		if (!plain || plain.rc !== CIPHER.OK) {
 			console.log('復号化失敗 理由: %s', plain.message);
 			return {
-				rc : "NG",
-				level : "2",
+				rc : CIPHER.NG,
+				level : CIPHER.LEVEL2,
 				decryptedValue : null,
 				message : plain.message
 			};
@@ -859,8 +862,8 @@ function Decrypt2(encrypted, passphrase1name, passphrase1, passphrase2name,
 						passphrase2);
 
 		return {
-			rc : "NG",
-			level : "2",
+			rc : CIPHER.NG,
+			level : CIPHER.LEVEL2,
 			decryptedValue : null,
 			message : message
 		};
@@ -868,8 +871,8 @@ function Decrypt2(encrypted, passphrase1name, passphrase1, passphrase2name,
 
 	// 復号した文字列を返却する
 	return {
-		rc : "OK",
-		level : "2",
+		rc : CIPHER.OK,
+		level : CIPHER.LEVEL2,
 		decryptedValue : plain.decryptedValue,
 		message : ""
 	};
@@ -892,7 +895,7 @@ function GetPassphraseItem(keyName, keyElementId, reKeyElementId) {
 		var message = keyName + "が指定されていません";
 		console.log("%s", message);
 		return {
-			rc : "undefined",
+			rc : CIPHER.UNDEF,
 			value : null,
 			message : message
 		};
@@ -907,7 +910,7 @@ function GetPassphraseItem(keyName, keyElementId, reKeyElementId) {
 			var message = keyName + "が指定されていません";
 			console.log("%s", message);
 			return {
-				rc : "NG",
+				rc : CIPHER.NG,
 				value : null,
 				message : message
 			};
@@ -917,7 +920,7 @@ function GetPassphraseItem(keyName, keyElementId, reKeyElementId) {
 		var message = keyName + "がありません";
 		console.log("%s", message);
 		return {
-			rc : "undefined",
+			rc : CIPHER.UNDEF,
 			value : null,
 			message : message
 		};
@@ -937,7 +940,7 @@ function GetPassphraseItem(keyName, keyElementId, reKeyElementId) {
 				var message = keyName + "(確認用)が指定されていません";
 				console.log("%s", message);
 				return {
-					rc : "NG",
+					rc : CIPHER.NG,
 					value : null,
 					message : message
 				};
@@ -947,7 +950,7 @@ function GetPassphraseItem(keyName, keyElementId, reKeyElementId) {
 				var message = keyName + "(確認用)が一致しません";
 				console.log("%s", message);
 				return {
-					rc : "UNMATCH",
+					rc : CIPHER.UNMATCH,
 					value : null,
 					message : message
 				};
@@ -957,7 +960,7 @@ function GetPassphraseItem(keyName, keyElementId, reKeyElementId) {
 			var message = keyName + "(確認用)がありません";
 			console.log("%s", message);
 			return {
-				rc : "undefined",
+				rc : CIPHER.UNDEF,
 				value : null,
 				message : message
 			};
@@ -970,7 +973,7 @@ function GetPassphraseItem(keyName, keyElementId, reKeyElementId) {
 		var passphrase = GetAes256Passphrase(key);
 		console.log("key=%s, passphrase=%s", key, passphrase);
 		return {
-			rc : "OK",
+			rc : CIPHER.OK,
 			value : passphrase,
 			message : ""
 		};
@@ -979,7 +982,7 @@ function GetPassphraseItem(keyName, keyElementId, reKeyElementId) {
 		var message = keyName + "の形式が不正です";
 		console.log("%s", message);
 		return {
-			rc : "NG",
+			rc : CIPHER.NG,
 			value : null,
 			message : message
 		};
@@ -997,7 +1000,7 @@ function GetLevel(levelElementId) {
 	if (!levelElementId) {
 		console.log("セキュリティレベルが指定されていません");
 		return {
-			rc : "NG",
+			rc : CIPHER.NG,
 			value : null,
 			message : "セキュリティレベルが指定されていません"
 		};
@@ -1008,7 +1011,7 @@ function GetLevel(levelElementId) {
 	if (levelElement == null) {
 		console.log("項目（%s）がありません", levelElementId);
 		return {
-			rc : "NG",
+			rc : CIPHER.NG,
 			value : null,
 			message : "項目（" + levelElementId + "）がありません"
 		};
@@ -1027,7 +1030,7 @@ function GetLevel(levelElementId) {
 
 	console.log("セキュリティレベル=%s", level);
 	return {
-		rc : "OK",
+		rc : CIPHER.OK,
 		value : level,
 		message : ""
 	};
@@ -1044,8 +1047,8 @@ function EncryptItem0(encrypt0ElementId) {
 	// 項目が指定されていない場合は正常リターンする
 	if (!encrypt0ElementId) {
 		return {
-			rc : "OK",
-			level : "0",
+			rc : CIPHER.OK,
+			level : CIPHER.LEVEL0,
 			encrypt0value : "",
 			encrypt1value : null,
 			encrypt2value : null,
@@ -1059,8 +1062,8 @@ function EncryptItem0(encrypt0ElementId) {
 		// FORMの項目が見つからない場合はエラーリターン
 		console.log("項目（%s）がありません", encrypt0ElementId);
 		return {
-			rc : "NG",
-			level : "0",
+			rc : CIPHER.NG,
+			level : CIPHER.LEVEL0,
 			encrypt0value : null,
 			encrypt1value : null,
 			encrypt2value : null,
@@ -1070,11 +1073,11 @@ function EncryptItem0(encrypt0ElementId) {
 	var encryptValue = encryptElement.value;
 	try {
 		var encrypted = Encrypt0(encryptValue);
-		if (encrypted.rc !== "OK") {
+		if (encrypted.rc !== CIPHER.OK) {
 			// 暗号化に失敗した場合はエラーリターンする
 			return {
-				rc : "NG",
-				level : "0",
+				rc : CIPHER.NG,
+				level : CIPHER.LEVEL0,
 				encrypt0value : null,
 				encrypt1value : null,
 				encrypt2value : null,
@@ -1082,8 +1085,8 @@ function EncryptItem0(encrypt0ElementId) {
 			};
 		}
 		return {
-			rc : "OK",
-			level : "0",
+			rc : CIPHER.OK,
+			level : CIPHER.LEVEL0,
 			encrypt0value : encryptValue,
 			encrypt1value : null,
 			encrypt2value : null,
@@ -1094,7 +1097,7 @@ function EncryptItem0(encrypt0ElementId) {
 		var message = e.message;
 		console.log("暗号化失敗：%s", message);
 		return {
-			rc : "NG",
+			rc : CIPHER.NG,
 			level : level,
 			encrypt0value : null,
 			encrypt1value : null,
@@ -1117,14 +1120,14 @@ function EncryptItem1(passphrase1name, passphrase1, encrypt0ElementId,
 					passphrase1name, passphrase1, encrypt0ElementId,
 					encrypt1ElementId);
 
-	var level = "1";
+	var level = CIPHER.LEVEL1;
 	var encrypt0value = null;
 	var encrypt1value = null;
 	var encrypt2value = null;
 
 	// セキュリティレベル0で暗号化する文字列を取り出す
 	var encrypted0 = EncryptItem0(encrypt0ElementId);
-	if (encrypted0.rc === "OK") {
+	if (encrypted0.rc === CIPHER.OK) {
 		encrypt0value = encrypted0.encrypt0value;
 	}
 
@@ -1134,7 +1137,7 @@ function EncryptItem1(passphrase1name, passphrase1, encrypt0ElementId,
 		// FORMの項目が見つからない場合はエラーリターン
 		console.log("項目（%s）がありません", encrypt1ElementId);
 		return {
-			rc : "NG",
+			rc : CIPHER.NG,
 			level : level,
 			encrypt0value : encrypt0value,
 			encrypt1value : null,
@@ -1145,10 +1148,10 @@ function EncryptItem1(passphrase1name, passphrase1, encrypt0ElementId,
 	try {
 		var encrypted1 = Encrypt1(encrypt1Element.value, passphrase1name,
 				passphrase1);
-		if (encrypted1.rc !== "OK") {
+		if (encrypted1.rc !== CIPHER.OK) {
 			// 暗号化に失敗した場合はエラーリターンする
 			return {
-				rc : "NG",
+				rc : CIPHER.NG,
 				level : level,
 				encrypt0value : encrypt0value,
 				encrypt1value : null,
@@ -1157,7 +1160,7 @@ function EncryptItem1(passphrase1name, passphrase1, encrypt0ElementId,
 			};
 		}
 		return {
-			rc : "OK",
+			rc : CIPHER.OK,
 			level : level,
 			encrypt0value : encrypt0value,
 			encrypt1value : encrypted1.encryptedValue,
@@ -1169,7 +1172,7 @@ function EncryptItem1(passphrase1name, passphrase1, encrypt0ElementId,
 		var message = e.message;
 		console.log("暗号化失敗：%s", message);
 		return {
-			rc : "NG",
+			rc : CIPHER.NG,
 			level : level,
 			encrypt0value : encrypt0value,
 			encrypt1value : null,
@@ -1192,7 +1195,7 @@ function EncryptItem2(passphrase1name, passphrase1, passphrase2name,
 					passphrase1name, passphrase1, passphrase2name, passphrase2,
 					encrypt0ElementId, encrypt1ElementId, encrypt2ElementId);
 
-	var level = "2";
+	var level = CIPHER.LEVEL2;
 	var encrypt0value = null;
 	var encrypt1value = null;
 	var encrypt2value = null;
@@ -1200,7 +1203,7 @@ function EncryptItem2(passphrase1name, passphrase1, passphrase2name,
 	// セキュリティレベル0で暗号化する文字列を取り出す
 	var encrypted1 = EncryptItem1(passphrase1name, passphrase1,
 			encrypt0ElementId, encrypt1ElementId);
-	if (encrypted1.rc == "OK") {
+	if (encrypted1.rc == CIPHER.OK) {
 		encrypt0value = encrypted1.encrypt0value;
 		encrypt1value = encrypted1.encrypt1value;
 	}
@@ -1211,7 +1214,7 @@ function EncryptItem2(passphrase1name, passphrase1, passphrase2name,
 		// FORMの項目が見つからない場合はエラーリターン
 		console.log("項目（%s）がありません", encrypt2ElementId);
 		return {
-			rc : "NG",
+			rc : CIPHER.NG,
 			level : level,
 			encrypt0value : encrypt0value,
 			encrypt1value : encrypt1value,
@@ -1222,10 +1225,10 @@ function EncryptItem2(passphrase1name, passphrase1, passphrase2name,
 	try {
 		var encrypted2 = Encrypt2(encrypt2Element.value, passphrase1name,
 				passphrase1, passphrase2name, passphrase2);
-		if (encrypted2.rc !== "OK") {
+		if (encrypted2.rc !== CIPHER.OK) {
 			// 暗号化に失敗した場合はエラーリターンする
 			return {
-				rc : "NG",
+				rc : CIPHER.NG,
 				level : level,
 				encrypt0value : encrypt0value,
 				encrypt1value : encrypt1value,
@@ -1234,7 +1237,7 @@ function EncryptItem2(passphrase1name, passphrase1, passphrase2name,
 			};
 		}
 		return {
-			rc : "OK",
+			rc : CIPHER.OK,
 			level : level,
 			encrypt0value : encrypt0value,
 			encrypt1value : encrypt1value,
@@ -1246,7 +1249,7 @@ function EncryptItem2(passphrase1name, passphrase1, passphrase2name,
 		var message = e.message;
 		console.log("暗号化失敗：%s", message);
 		return {
-			rc : "NG",
+			rc : CIPHER.NG,
 			level : level,
 			encrypt0value : encrypt0value,
 			encrypt1value : encrypt1value,
@@ -1272,11 +1275,11 @@ function EncryptItem(passphrase1name, passphrase1, passphrase2name,
 					encrypt2ElementId);
 
 	var levelElement = GetLevel(levelElementId);
-	if (levelElement.rc !== "OK") {
+	if (levelElement.rc !== CIPHER.OK) {
 		// セキュリティレベルが取得できない場合はエラーリターンする
 		console.log("セキュリティレベルが取得できない：%s", levelElement.message);
 		return {
-			rc : "NG",
+			rc : CIPHER.NG,
 			level : null,
 			encrypt0value : null,
 			encrypt1value : null,
@@ -1288,14 +1291,14 @@ function EncryptItem(passphrase1name, passphrase1, passphrase2name,
 	console.log("セキュリティレベル=%s", level);
 
 	// セキュリティレベル毎の暗号化処理
-	if (level == "0") {
+	if (level === CIPHER.LEVEL0) {
 		// セキュリティレベル0の暗号化処理
 		return EncryptItem0(encrypt0ElementId);
-	} else if (level == "1") {
+	} else if (level === CIPHER.LEVEL1) {
 		// セキュリティレベル1の暗号化処理
 		return EncryptItem1(passphrase1name, passphrase1, encrypt0ElementId,
 				encrypt1ElementId);
-	} else if (level == "2") {
+	} else if (level === CIPHER.LEVEL2) {
 		// セキュリティレベル2の暗号化処理
 		return EncryptItem2(passphrase1name, passphrase1, passphrase2name,
 				passphrase2, encrypt0ElementId, encrypt1ElementId,
@@ -1303,7 +1306,7 @@ function EncryptItem(passphrase1name, passphrase1, passphrase2name,
 	} else {
 		console.log("サポートされていない暗号レベルが指定されました。レベル=%s", level);
 		return {
-			rc : "NG",
+			rc : CIPHER.NG,
 			level : null,
 			encrypt0value : null,
 			encrypt1value : null,
@@ -1320,12 +1323,12 @@ function DecryptItem0(encrypted0ElementId) {
 
 	console.log("DecryptItem0（encrypted0ElementId=%s)", encrypted0ElementId);
 
-	var level = "0";
+	var level = CIPHER.LEVEL0;
 
 	// 項目が指定されていない場合は正常リターンする
 	if (!encrypted0ElementId) {
 		return {
-			rc : "OK",
+			rc : CIPHER.OK,
 			level : level,
 			decryptedValue : "",
 			message : ""
@@ -1338,7 +1341,7 @@ function DecryptItem0(encrypted0ElementId) {
 		// FORMの項目が見つからない場合はエラーリターン
 		console.log("項目（%s）がありません", encrypted0ElementId);
 		return {
-			rc : "NG",
+			rc : CIPHER.NG,
 			level : level,
 			decryptedValue : null,
 			message : "項目（" + encrypted0ElementId + "）がありません"
@@ -1348,10 +1351,10 @@ function DecryptItem0(encrypted0ElementId) {
 	console.log("encryptedValue=%s", encryptedValue);
 	try {
 		var decrypted = Decrypt0(encryptedValue);
-		if (decrypted.rc !== "OK") {
+		if (decrypted.rc !== CIPHER.OK) {
 			// 暗号化に失敗した場合はエラーリターンする
 			return {
-				rc : "NG",
+				rc : CIPHER.NG,
 				level : level,
 				decryptedValue : null,
 				message : decrypted.message
@@ -1364,7 +1367,7 @@ function DecryptItem0(encrypted0ElementId) {
 		console.log('message --> %s', decrypted.message);
 
 		return {
-			rc : "OK",
+			rc : CIPHER.OK,
 			level : level,
 			decryptedValue : decrypted.decryptedValue,
 			message : ""
@@ -1374,7 +1377,7 @@ function DecryptItem0(encrypted0ElementId) {
 		var message = e.message;
 		console.log("復号化失敗：%s", message);
 		return {
-			rc : "NG",
+			rc : CIPHER.NG,
 			level : level,
 			decryptedValue : null,
 			message : message
@@ -1395,7 +1398,7 @@ function DecryptItem1(passphrase1name, passphrase1, encrypted0ElementId,
 					passphrase1name, passphrase1, encrypted0ElementId,
 					encrypted1ElementId);
 
-	var level = "1";
+	var level = CIPHER.LEVEL1;
 	var decryptedValue = null;
 
 	// セキュリティレベル0で暗号化する文字列を取り出す
@@ -1407,9 +1410,9 @@ function DecryptItem1(passphrase1name, passphrase1, encrypted0ElementId,
 	console.log('message --> %s', decrypted0.message);
 
 	decryptedValue = decrypted0.decryptedValue;
-	if (decrypted0.rc !== "OK") {
+	if (decrypted0.rc !== CIPHER.OK) {
 		return {
-			rc : "NG",
+			rc : CIPHER.NG,
 			level : level,
 			decryptedValue : decryptedValue,
 			message : decrypted0.message
@@ -1419,7 +1422,7 @@ function DecryptItem1(passphrase1name, passphrase1, encrypted0ElementId,
 	// 項目が指定されていない場合は正常リターンする
 	if (!encrypted1ElementId) {
 		return {
-			rc : "OK",
+			rc : CIPHER.OK,
 			level : level,
 			decryptedValue : decryptedValue,
 			message : ""
@@ -1432,7 +1435,7 @@ function DecryptItem1(passphrase1name, passphrase1, encrypted0ElementId,
 		// FORMの項目が見つからない場合はエラーリターン
 		console.log("項目（%s）がありません", encrypted1ElementId);
 		return {
-			rc : "NG",
+			rc : CIPHER.NG,
 			level : level,
 			decryptedValue : decryptedValue,
 			message : "項目（" + encrypted1ElementId + "）がありません"
@@ -1448,17 +1451,17 @@ function DecryptItem1(passphrase1name, passphrase1, encrypted0ElementId,
 		console.log('decryptedValue --> %s', decrypted.decryptedValue);
 		console.log('message --> %s', decrypted.message);
 
-		if (decrypted.rc !== "OK") {
+		if (decrypted.rc !== CIPHER.OK) {
 			// 暗号化に失敗した場合はエラーリターンする
 			return {
-				rc : "NG",
+				rc : CIPHER.NG,
 				level : level,
 				decryptedValue : decryptedValue,
 				message : decrypted.message
 			};
 		}
 		return {
-			rc : "OK",
+			rc : CIPHER.OK,
 			level : level,
 			decryptedValue : decrypted.decryptedValue,
 			message : ""
@@ -1468,7 +1471,7 @@ function DecryptItem1(passphrase1name, passphrase1, encrypted0ElementId,
 		var message = e.message;
 		console.log("復号化失敗：%s", message);
 		return {
-			rc : "NG",
+			rc : CIPHER.NG,
 			level : level,
 			decryptedValue : decryptedValue,
 			message : message
@@ -1491,7 +1494,7 @@ function DecryptItem2(passphrase1name, passphrase1, passphrase2name,
 					encrypted0ElementId, encrypted1ElementId,
 					encrypted2ElementId);
 
-	var level = "2";
+	var level = CIPHER.LEVEL2;
 	var decryptedValue = null;
 
 	// セキュリティレベル0で暗号化する文字列を取り出す
@@ -1504,9 +1507,9 @@ function DecryptItem2(passphrase1name, passphrase1, passphrase2name,
 	console.log('message --> %s', decrypted1.message);
 
 	decryptedValue = decrypted1.decryptedValue;
-	if (decrypted1.rc !== "OK") {
+	if (decrypted1.rc !== CIPHER.OK) {
 		return {
-			rc : "NG",
+			rc : CIPHER.NG,
 			level : level,
 			decryptedValue : decryptedValue,
 			message : decrypted1.message
@@ -1516,7 +1519,7 @@ function DecryptItem2(passphrase1name, passphrase1, passphrase2name,
 	// 項目が指定されていない場合は正常リターンする
 	if (!encrypted2ElementId) {
 		return {
-			rc : "OK",
+			rc : CIPHER.OK,
 			level : level,
 			decryptedValue : decryptedValue,
 			message : ""
@@ -1529,7 +1532,7 @@ function DecryptItem2(passphrase1name, passphrase1, passphrase2name,
 		// FORMの項目が見つからない場合はエラーリターン
 		console.log("項目（%s）がありません", encrypted2ElementId);
 		return {
-			rc : "NG",
+			rc : CIPHER.NG,
 			level : level,
 			decryptedValue : decryptedValue,
 			message : "項目（" + encrypted2ElementId + "）がありません"
@@ -1546,17 +1549,17 @@ function DecryptItem2(passphrase1name, passphrase1, passphrase2name,
 		console.log('decryptedValue --> %s', decrypted.decryptedValue);
 		console.log('message --> %s', decrypted.message);
 
-		if (decrypted.rc !== "OK") {
+		if (decrypted.rc !== CIPHER.OK) {
 			// 暗号化に失敗した場合はエラーリターンする
 			return {
-				rc : "NG",
+				rc : CIPHER.NG,
 				level : level,
 				decryptedValue : decryptedValue,
 				message : decrypted.message
 			};
 		}
 		return {
-			rc : "OK",
+			rc : CIPHER.OK,
 			level : level,
 			decryptedValue : decrypted.decryptedValue,
 			message : ""
@@ -1566,7 +1569,7 @@ function DecryptItem2(passphrase1name, passphrase1, passphrase2name,
 		var message = e.message;
 		console.log("復号化失敗：%s", message);
 		return {
-			rc : "NG",
+			rc : CIPHER.NG,
 			level : level,
 			decryptedValue : decryptedValue,
 			message : message
@@ -1590,11 +1593,11 @@ function DecryptItem(passphrase1name, passphrase1, passphrase2name,
 					encrypted2ElementId);
 
 	var levelElement = GetLevel(levelElementId);
-	if (levelElement.rc !== "OK") {
+	if (levelElement.rc !== CIPHER.OK) {
 		// セキュリティレベルが取得できない場合はエラーリターンする
 		console.log("セキュリティレベルが取得できない：%s", levelElement.message);
 		return {
-			rc : "NG",
+			rc : CIPHER.NG,
 			level : null,
 			decryptedValue : null,
 			message : levelElement.message
@@ -1604,14 +1607,14 @@ function DecryptItem(passphrase1name, passphrase1, passphrase2name,
 	console.log("セキュリティレベル=%s", level);
 
 	// セキュリティレベル毎の暗号化処理
-	if (level == "0") {
+	if (level === CIPHER.LEVEL0) {
 		// セキュリティレベル0の暗号化処理
 		return DecryptItem0(encrypted0ElementId);
-	} else if (level == "1") {
+	} else if (level === CIPHER.LEVEL1) {
 		// セキュリティレベル1の暗号化処理
 		return DecryptItem1(passphrase1name, passphrase1, encrypted0ElementId,
 				encrypted1ElementId);
-	} else if (level == "2") {
+	} else if (level === CIPHER.LEVEL2) {
 		// セキュリティレベル2の暗号化処理
 		return DecryptItem2(passphrase1name, passphrase1, passphrase2name,
 				passphrase2, encrypted0ElementId, encrypted1ElementId,
@@ -1619,7 +1622,7 @@ function DecryptItem(passphrase1name, passphrase1, passphrase2name,
 	} else {
 		console.log("サポートされていない暗号レベルが指定されました。レベル=%s", level);
 		return {
-			rc : "NG",
+			rc : CIPHER.NG,
 			level : null,
 			decryptedValue : null,
 			message : "サポートされていない暗号レベルが指定されました。レベル=" + level
